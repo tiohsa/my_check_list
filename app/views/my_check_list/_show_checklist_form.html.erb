@@ -1,0 +1,15 @@
+<div class="splitcontent">
+    <div class="splitcontentleft">
+        <div class="">
+            <div class="label">
+                <strong>Check List:</strong>
+            </div>
+        </div>
+        <% checklist.each do |item| %>
+            <div class="">
+                <%= check_box_tag "items[][is_done]", true, item.is_done %>
+                <%= item.text %>
+            </div>
+        <% end %>
+    </div>
+</div>
