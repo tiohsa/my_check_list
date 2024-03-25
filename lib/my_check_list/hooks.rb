@@ -37,14 +37,7 @@ module MyCheckList
       CheckItem.destroy_by(issue: issue)
       save_checklist(items, issue)
       update_issue_done_ratio(issue)
-    end
-
-    def controller_issues_edit_after_save(context = {})
-      issue = context[:issue]
-      while issue.present?
-        update_issue_done_ratio(issue)
-        issue = issue.parent
-      end
+      update_parent_progress(issue)
     end
 
     private

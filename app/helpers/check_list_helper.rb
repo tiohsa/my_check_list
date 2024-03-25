@@ -15,4 +15,11 @@ module CheckListHelper
     subtasks_completed = subtasks.filter{|subtask| subtask.done_ratio == 100 || subtask.status_id == 5}
     (subtasks_completed.length.to_f + items_completed.length.to_f) / total.to_f * 100.0
   end
+
+  def update_parent_progress(issue)
+      while issue.present?
+        update_issue_done_ratio(issue)
+        issue = issue.parent
+      end
+    end
 end

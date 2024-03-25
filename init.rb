@@ -5,7 +5,7 @@ Redmine::Plugin.register :my_check_list do
   name 'redmine check list plugin'
   # author 'tiohsa'
   description 'This is a check list plugin for Redmine'
-  version '0.0.1'
+  version '0.0.2'
   # url 'https://github.com/tiohsa/my_check_list'
   # author_url 'https://github.com/tiohsa/my_check_list'
 end
