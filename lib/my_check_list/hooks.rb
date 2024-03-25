@@ -39,6 +39,14 @@ module MyCheckList
       update_issue_done_ratio(issue)
     end
 
+    def controller_issues_edit_after_save(context = {})
+      issue = context[:issue]
+      while issue.present?
+        update_issue_done_ratio(issue)
+        issue = issue.parent
+      end
+    end
+
     private
 
     def save_checklist(items, issue)
