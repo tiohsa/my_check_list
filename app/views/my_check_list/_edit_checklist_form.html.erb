@@ -8,11 +8,11 @@
                         title: "Add",
                         class: "icon-only icon-add checkitem-add" %>
         </p>
-        <% checklist.each do |item| %>
+        <% checklist.each_with_index do |item, index| %>
         <p>
             <%= hidden_field_tag "items[][is_done]", false %>
             <%= check_box_tag "items[][is_done]", true, item.is_done, id: "edit_is_done_#{item.id}", style: "cursor: pointer;" %>
-            <%= text_field_tag "items[][text]", item.text, size: 100, tabindex: 2000 + item.id %>
+            <%= text_field_tag "items[][text]", item.text, size: 100, tabindex: 10000 + index %>
             <%= link_to "", "javascript:void(0);", class: "icon-only icon-del checkitem-delete", onclick: "deleteCheckItem(event); return false;" %>
         </p>
         <% end %>
@@ -41,8 +41,8 @@
         input.setAttribute('type', 'text');
         input.setAttribute('size', '100');
         input.style.marginLeft = '4px';
-        var date = new Date();
-        input.setAttribute('tabindex', 3000 + date.getMinutes() * 60 + date.getSeconds());
+        var count = $("#edit-checkitems").children().length;
+        input.setAttribute('tabindex', 10000 + count);
 
         var a = document.createElement('a');
         a.setAttribute('href', 'javascript:void(0);');

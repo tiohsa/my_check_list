@@ -1,6 +1,6 @@
 <div class="splitcontent">
     <div class="splitcontentleft">
-        <div class="">
+        <div>
             <div class="label">
                 <strong>Check List:</strong>
             </div>
@@ -19,7 +19,6 @@
                 <% else %>
                     <%= label_tag "is_done_#{item.id}", item.text, style: "cursor: pointer;", id: "text_#{item.id}"%>
                 <% end %>
-                <%#= item.updated_at.to_s(:datetime_jp) %>
             </div>
         <% end %>
     </div>
