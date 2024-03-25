@@ -1,6 +1,6 @@
 module MyCheckList
   class Hooks < Redmine::Hook::ViewListener
-    
+
     def view_issues_show_description_bottom(context = {})
       checklist = []
       if context[:issue].id.present?
@@ -22,22 +22,24 @@ module MyCheckList
                 :locals => {context: context, checklist: checklist}
       })
     end
-    
+
     def controller_issues_new_after_save(context={})
-      items = items_params(context) 
+      items = items_params(context)
       issue = context[:issue]
       save_checklist(items, issue)
+      # update_issue_done_ratio(issue)
     end
 
     def controller_issues_edit_after_save(context={})
-      items = items_params(context) 
+      items = items_params(context)
       issue = context[:issue]
       CheckItem.destroy_by(issue: issue)
       save_checklist(items, issue)
+      update_issue_done_ratio(issue)
     end
-    
+
     private
-    
+
     def save_checklist(items, issue)
       edit_items = []
       items.each_with_index do |item, index|
@@ -49,20 +51,22 @@ module MyCheckList
       edit_items.each do |edit_item|
         edit_item.save
       end
-      issue.done_ratio = calc_progress(edit_items, issue)
+    end
+
+    def update_issue_done_ratio(issue)
+      items = CheckItem.where(issue: issue)
+      issue.done_ratio = calc_progress(items, issue)
       if issue.done_ratio == 100
         issue.status_id = 5
       end
       issue.save
     end
-    
+
     def calc_progress(items, issue)
       items_completed = items.filter{ |item| item.is_done }
       total = issue.children.length + items.length
-
       subtasks = issue.children
       subtasks_completed = subtasks.filter{|subtask| subtask.done_ratio == 100 || subtask.status_id == 5}
-
       (subtasks_completed.length.to_f + items_completed.length.to_f) / total.to_f * 100.0
     end
 
@@ -75,6 +79,6 @@ module MyCheckList
         {}
       end
     end
-    
+
   end
 end

@@ -6,10 +6,51 @@
             </div>
         </div>
         <% checklist.each do |item| %>
-            <div class="">
-                <%= check_box_tag "items[][is_done]", true, item.is_done %>
-                <%= item.text %>
+            <div>
+                <%= check_box_tag "items[][is_done]",
+                    true,
+                    item.is_done,
+                    data: { order_num: item.order_num },
+                    :onclick => "update_progress(event, #{item.id});",
+                    style: "cursor: pointer;",
+                    id: "is_done_#{item.id}" %>
+                <% if item.is_done %>
+                    <%= label_tag "is_done_#{item.id}", item.text, style: "cursor: pointer; text-decoration: line-through;", id: "text_#{item.id}" %>
+                <% else %>
+                    <%= label_tag "is_done_#{item.id}", item.text, style: "cursor: pointer;", id: "text_#{item.id}"%>
+                <% end %>
             </div>
         <% end %>
     </div>
 </div>
+
+
+<script>
+//<![CDATA[
+    function update_progress(e, id) {
+      var target = e.target;
+      var order_num = target.getAttribute("data-order-num");
+      var is_done = $(target).is(":checked");
+      if($("#edit-checkitems").is(":visible") == false) {
+          $.ajax({
+            url: "<%= url_for controller: :check_list, action: :update_progress %>",
+            type: "POST",
+            data: { "order_num": order_num, "is_done": is_done  },
+            dataType: "json"
+          }).done(function(response){
+            location.reload();
+          }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+            alert("error");
+            console.error(errorThrown);
+          })
+      } else {
+        $("#edit_is_done_" + id).prop("checked", is_done);
+        if(is_done) {
+            $("#text_" + id).css("text-decoration", "line-through");
+        } else {
+            $("#text_" + id).css("text-decoration", "none");
+        }
+      }
+    }
+//]]>
+</script>
