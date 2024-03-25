@@ -12,8 +12,8 @@
         <p>
             <%= hidden_field_tag "items[][is_done]", false %>
             <%= check_box_tag "items[][is_done]", true, item.is_done, id: "edit_is_done_#{item.id}", style: "cursor: pointer;" %>
-            <%= text_field_tag "items[][text]", item.text %>
-            <%= link_to "Delete", "javascript:void(0);", class: "icon-only icon-del checkitem-delete", onclick: "deleteCheckItem(event); return false;" %>
+            <%= text_field_tag "items[][text]", item.text, size: 100 %>
+            <%= link_to "", "javascript:void(0);", class: "icon-only icon-del checkitem-delete", onclick: "deleteCheckItem(event); return false;" %>
         </p>
         <% end %>
     </div>
@@ -39,11 +39,14 @@
         input.setAttribute('name', 'items[][text]');
         input.setAttribute('value', '');
         input.setAttribute('type', 'text');
+        input.setAttribute('size', '100');
+        input.style.marginLeft = '4px';
 
         var a = document.createElement('a');
         a.setAttribute('href', 'javascript:void(0);');
         a.setAttribute('onclick', 'deleteCheckItem(event); return false;');
         a.setAttribute('class', 'icon-only icon-del checkitem-delete');
+        a.style.marginLeft = '4px';
 
         p.appendChild(hidden);
         p.appendChild(checkbox);
