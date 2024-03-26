@@ -13,6 +13,7 @@
             <%= hidden_field_tag "items[][is_done]", false %>
             <%= check_box_tag "items[][is_done]", true, item.is_done, id: "edit_is_done_#{item.id}", style: "cursor: pointer;" %>
             <%= text_field_tag "items[][text]", item.text, size: 100, tabindex: 10000 + index %>
+            <%= hidden_field_tag "items[][id]", item.id%>
             <%= link_to "", "javascript:void(0);", class: "icon-only icon-del checkitem-delete", onclick: "deleteCheckItem(event); return false;" %>
         </p>
         <% end %>
