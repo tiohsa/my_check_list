@@ -1,5 +1,5 @@
 require 'redmine'
-require_dependency File.expand_path('../lib/my_check_list/hooks', __FILE__)
+require_dependency File.expand_path('../lib/check_list/hooks', __FILE__)
 
 Redmine::Plugin.register :my_check_list do
   name 'redmine check list plugin'

@@ -8,7 +8,7 @@ module MyCheckList
         checklist = CheckItem.where(issue: context[:issue]).order(:order_num)
       end
       context[:controller].send('render_to_string',{
-                :partial => 'my_check_list/show_checklist_form',
+                :partial => 'check_list/show_checklist_form',
                 :locals => {context: context, checklist: checklist}
       })
     end
@@ -19,7 +19,7 @@ module MyCheckList
         checklist = CheckItem.where(issue: context[:issue]).order(:order_num)
       end
       context[:controller].send('render_to_string',{
-                :partial => 'my_check_list/edit_checklist_form',
+                :partial => 'check_list/edit_checklist_form',
                 :locals => {context: context, checklist: checklist}
       })
     end
