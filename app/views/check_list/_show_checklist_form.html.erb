@@ -1,3 +1,5 @@
+<% if checklist.length > 0 %>
+<hr/>
 <div class="splitcontent">
     <div class="splitcontentleft">
         <div>
@@ -7,23 +9,30 @@
         </div>
         <% checklist.each do |item| %>
             <div>
-                <%= check_box_tag "items[][is_done]",
-                    true,
-                    item.is_done,
-                    data: { order_num: item.order_num },
-                    :onclick => "update_progress(event, #{item.id});",
-                    style: "cursor: pointer;",
-                    id: "is_done_#{item.id}" %>
-                <% if item.is_done %>
-                    <%= label_tag "is_done_#{item.id}", item.text, style: "cursor: pointer; text-decoration: line-through;", id: "text_#{item.id}" %>
-                <% else %>
-                    <%= label_tag "is_done_#{item.id}", item.text, style: "cursor: pointer;", id: "text_#{item.id}"%>
-                <% end %>
+                <div style="display: table-cell; vertical-align: middle;">
+                    <%= check_box_tag "items[][is_done]",
+                        true,
+                        item.is_done,
+                        data: { order_num: item.order_num },
+                        :onclick => "update_progress(event, #{item.id});",
+                        style: "cursor: pointer;",
+                        id: "is_done_#{item.id}" %>
+                    <% if item.is_done %>
+                        <%= label_tag "is_done_#{item.id}", item.text, style: "display: inline-block; cursor: pointer; min-width: 400px; text-decoration: line-through;", id: "text_#{item.id}" %>
+                    <% else %>
+                        <%= label_tag "is_done_#{item.id}", item.text, style: "display: inline-block; cursor: pointer; min-width: 400px;", id: "text_#{item.id}"%>
+                    <% end %>
+                    <%= number_field_tag "items[][man_hours]", item.man_hours, disabled: item.is_done, min: 0, max: 5, step: 0.25, style: "font-size: 12px; height: 20px; width: 60px;", placeholder: "Hours", id: "man_hours_#{item.id}" %>
+                </div>
             </div>
         <% end %>
+        <div>
+            <strong>Total Task Hours:</strong>
+            <div><%= checklist.map{ |item| item.man_hours if item.is_done }.compact.sum %></div>
+        </div>
     </div>
 </div>
-
+<% end %>
 
 <script>
 //<![CDATA[
@@ -31,11 +40,12 @@
       var target = e.target;
       var order_num = target.getAttribute("data-order-num");
       var is_done = $(target).is(":checked");
+      var man_hours = $("#man_hours_" + id).val();
       if($("#edit-checkitems").is(":visible") == false) {
           $.ajax({
             url: "<%= url_for controller: :check_list, action: :update_progress %>",
             type: "POST",
-            data: { "order_num": order_num, "is_done": is_done  },
+            data: { "order_num": order_num, "is_done": is_done, "man_hours": man_hours  },
             dataType: "json"
           }).done(function(response){
             location.reload();

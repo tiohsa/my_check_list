@@ -12,7 +12,8 @@
         <p>
             <%= hidden_field_tag "items[][is_done]", false %>
             <%= check_box_tag "items[][is_done]", true, item.is_done, id: "edit_is_done_#{item.id}", style: "cursor: pointer;" %>
-            <%= text_field_tag "items[][text]", item.text, size: 100, tabindex: 10000 + index %>
+            <%= text_field_tag "items[][text]", item.text, size: 100, placeholder: "Task", tabindex: 10000 + index %>
+            <%= number_field_tag "items[][man_hours]", item.man_hours, min: 0, max: 5, step: 0.25, style: "width: 60px;", placeholder: "Hours", tabindex: 11000 + index %>
             <%= hidden_field_tag "items[][id]", item.id%>
             <%= link_to "", "javascript:void(0);", class: "icon-only icon-del checkitem-delete", onclick: "deleteCheckItem(event); return false;" %>
         </p>
@@ -41,9 +42,22 @@
         input.setAttribute('value', '');
         input.setAttribute('type', 'text');
         input.setAttribute('size', '100');
+        input.setAttribute('placeholder', 'Task');
         input.style.marginLeft = '4px';
         var count = $("#edit-checkitems").children().length;
         input.setAttribute('tabindex', 10000 + count);
+
+        var man_hours = document.createElement('input');
+        man_hours.setAttribute('name', 'items[][man_hours]');
+        man_hours.setAttribute('value', '');
+        man_hours.setAttribute('type', 'number');
+        man_hours.setAttribute('placeholder', 'Hours');
+        man_hours.setAttribute('min', '0');
+        man_hours.setAttribute('max', '9.5');
+        man_hours.setAttribute('step', '0.5');
+        man_hours.style.width = '50px';
+        man_hours.setAttribute('tabindex', 11000 + count);
+        man_hours.style.marginLeft = '4px';
 
         var a = document.createElement('a');
         a.setAttribute('href', 'javascript:void(0);');
@@ -54,6 +68,7 @@
         p.appendChild(hidden);
         p.appendChild(checkbox);
         p.appendChild(input);
+        p.appendChild(man_hours);
         p.appendChild(a);
 
         var divElement = document.querySelector('#edit-checkitems');

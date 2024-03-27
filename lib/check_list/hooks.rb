@@ -1,4 +1,4 @@
-module MyCheckList
+module CheckList
   class Hooks < Redmine::Hook::ViewListener
     include CheckListHelper
 
@@ -52,7 +52,7 @@ module MyCheckList
         registered_check_item.id
       end
       item_ids = items.map do |item|
-        item[:id].to_i if item[:id] != -1
+        item[:id].to_i
       end.compact
       delete_ids = registered_check_item_ids - item_ids
       delete_ids
@@ -68,6 +68,7 @@ module MyCheckList
         check_item.issue = issue
         check_item.text = item[:text]
         check_item.is_done = item[:is_done]
+        check_item.man_hours = item[:man_hours]
         check_item.order_num = index
         edit_items << check_item
       end
@@ -79,7 +80,7 @@ module MyCheckList
     def items_params(context={})
       if context[:params][:items].present?
         context[:params].require(:items).map do |item|
-          item.permit(:text, :is_done, :id) if !item[:text].blank?
+          item.permit(:text, :is_done, :id, :man_hours) if !item[:text].blank?
         end.compact
       else
         {}
